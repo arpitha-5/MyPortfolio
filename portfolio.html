@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arpitha Medarametla</title>
+    <link rel="icon" type="image/jpg" href="https://res.cloudinary.com/dfeyi8eom/image/upload/Ammu_nif3kq.png">
+
+ 
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="modern-styles.css">
+</head>
+<body>
+    <!-- Ultra-Stylish Navigation -->
+    <nav class="ultra-navbar" id="navbar">
+        <div class="nav-container">
+            <!-- Enhanced Logo -->
+            <div class="nav-logo">
+                <a href="#home" class="logo-link">
+                    <div class="logo-container">
+                        <div class="logo-icon">
+                            <i class="fas fa-code"></i>
+                            <div class="logo-glow"></div>
+                        </div>
+                        <div class="logo-text-container">
+                            <span class="logo-name">ARPITHA</span>
+                            <span class="logo-subtitle">Full Stack Developer</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Enhanced Navigation Menu -->
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active">
+                        <i class="fas fa-home nav-icon"></i>
+                        <span class="nav-text">Home</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">
+                        <i class="fas fa-user nav-icon"></i>
+                        <span class="nav-text">About</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#skills" class="nav-link">
+                        <i class="fas fa-cogs nav-icon"></i>
+                        <span class="nav-text">Skills</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#education" class="nav-link">
+                        <i class="fas fa-graduation-cap nav-icon"></i>
+                        <span class="nav-text">Education</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#projects" class="nav-link">
+                        <i class="fas fa-rocket nav-icon"></i>
+                        <span class="nav-text">Projects</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">
+                        <i class="fas fa-envelope nav-icon"></i>
+                        <span class="nav-text">Contact</span>
+                        <div class="nav-indicator"></div>
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- Enhanced Navigation Actions -->
+            <div class="nav-actions">
+                <!-- Theme Selector Dropdown -->
+                <div class="theme-selector" id="theme-selector">
+                    <button class="theme-trigger" id="theme-trigger" aria-label="Select theme">
+                        <div class="current-theme">
+                            <div class="theme-preview" id="current-theme-preview"></div>
+                            <span class="theme-name" id="current-theme-name">Light</span>
+                            <i class="fas fa-chevron-down theme-arrow"></i>
+                        </div>
+                    </button>
+                    
+                    <!-- Theme Dropdown -->
+                    <div class="theme-dropdown" id="theme-dropdown">
+                        <div class="theme-options">
+                            <div class="theme-option active" data-theme="light">
+                                <div class="theme-preview light-preview"></div>
+                                <div class="theme-info">
+                                    <span class="theme-title">Light</span>
+                                    <span class="theme-desc">Clean & Bright</span>
+                                </div>
+                                <i class="fas fa-sun theme-icon"></i>
+                            </div>
+                            
+                            <div class="theme-option" data-theme="dark">
+                                <div class="theme-preview dark-preview"></div>
+                                <div class="theme-info">
+                                    <span class="theme-title">Dark</span>
+                                    <span class="theme-desc">Sleek & Modern</span>
+                                </div>
+                                <i class="fas fa-moon theme-icon"></i>
+                            </div>
+                            
+                            <div class="theme-option" data-theme="ocean">
+                                <div class="theme-preview ocean-preview"></div>
+                                <div class="theme-info">
+                                    <span class="theme-title">Ocean</span>
+                                    <span class="theme-desc">Blue & Fresh</span>
+                                </div>
+                                <i class="fas fa-water theme-icon"></i>
+                            </div>
+                            
+                            <div class="theme-option" data-theme="sunset">
+                                <div class="theme-preview sunset-preview"></div>
+                                <div class="theme-info">
+                                    <span class="theme-title">Sunset</span>
+                                    <span class="theme-desc">Warm & Vibrant</span>
+                                </div>
+                                <i class="fas fa-sun theme-icon"></i>
+                            </div>
+                            
+                            <div class="theme-option" data-theme="forest">
+                                <div class="theme-preview forest-preview"></div>
+                                <div class="theme-info">
+                                    <span class="theme-title">Forest</span>
+                                    <span class="theme-desc">Green & Natural</span>
+                                </div>
+                                <i class="fas fa-leaf theme-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu Toggle -->
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <div class="toggle-bg"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navbar Background Effect -->
+        <div class="navbar-bg"></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="greeting">Hi, I'm</span>
+                    <span class="highlight animated-name">Arpitha Medarametla</span>
+                    <div class="title-decoration">
+                        <div class="decoration-dot"></div>
+                        <div class="decoration-dot"></div>
+                        <div class="decoration-dot"></div>
+                    </div>
+                </h1>
+                <p class="hero-subtitle">Full Stack Developer & Tech Enthusiast</p>
+                <p class="hero-description">
+                    Passionate about creating innovative web solutions with modern technologies. 
+                    Currently pursuing Computer Science and building amazing digital experiences.
+                </p>
+                
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Get In Touch</span>
+                    </a>
+                    <a href="#projects" class="btn btn-outline">
+                        <i class="fas fa-rocket"></i>
+                        <span>View Projects</span>
+                    </a>
+                    <a href="assets/ARPITHA_RESUME.pdf" target="_blank" class="btn btn-resume">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Resume</span>
+                        <div class="btn-glow"></div>
+                    </a>
+                </div>
+                
+                <div class="hero-social">
+                    <a href="https://github.com/arpitha-5" target="_blank" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/arpitha-medarametla/" target="_blank" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                   
+    
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <div class="image-container">
+                    <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/ammu_eiue6q.jpg" 
+                         alt="Arpitha Medarametla" class="profile-img">
+                    <div class="image-bg"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <div class="scroll-line"></div>
+            <span class="scroll-text">Scroll Down</span>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">About Me</h2>
+                <p class="section-subtitle">Get to know more about who I am, what I do, and my journey</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Hello! I'm Arpitha Medarametla</h3>
+                    <p>
+                        I'm a passionate <strong>Full Stack Developer</strong> and <strong>Computer Science student</strong> 
+                        currently in my third year at Narsimha Reddy Engineering College. My journey in tech 
+                        started with curiosity about how websites work, and it has evolved into a deep passion for 
+                        creating digital solutions.
+                    </p>
+                    
+                    <p>
+                        I specialize in <strong>modern web development</strong> with expertise in React, Node.js, 
+                        and various databases. I'm also deeply interested in <strong>cybersecurity</strong> and 
+                        constantly learning about secure coding practices and emerging technologies.
+                    </p>
+                    
+                    <div class="about-highlights">
+                        <div class="highlight-item">
+                            <i class="fas fa-code"></i>
+                            <h4>Clean Code</h4>
+                            <p>Writing maintainable and scalable code</p>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-lightbulb"></i>
+                            <h4>Problem Solving</h4>
+                            <p>Finding creative solutions to complex challenges</p>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-rocket"></i>
+                            <h4>Innovation</h4>
+                            <p>Exploring new technologies and methodologies</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="15">10</span>
+                        <span class="stat-label">Projects Completed</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="3">2</span>
+                        <span class="stat-label">Years Learning</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="8">8.0</span>
+                        <span class="stat-label">CGPA</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="5">4</span>
+                        <span class="stat-label">Hackathons</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ultra-Stylish Skills Section -->
+    <section class="ultra-skills" id="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Skills & Expertise</h2>
+                <p class="section-subtitle">Technologies I master and innovations I create with</p>
+            </div>
+            
+            <!-- Floating Skills Particles -->
+            <div class="skills-particles">
+                <div class="skill-particle" data-skill="React"></div>
+                <div class="skill-particle" data-skill="Node.js"></div>
+                <div class="skill-particle" data-skill="Python"></div>
+                <div class="skill-particle" data-skill="AWS"></div>
+                <div class="skill-particle" data-skill="Docker"></div>
+            </div>
+            
+            <div class="skills-showcase">
+                <!-- Frontend Skills -->
+                <div class="skill-domain frontend-domain">
+                    <div class="domain-header">
+                        <div class="domain-icon">
+                            <i class="fab fa-react"></i>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <h3>Frontend Mastery</h3>
+                        <p>Crafting beautiful user experiences</p>
+                    </div>
+                    
+                    <div class="skills-constellation">
+                        <div class="skill-star" data-skill="React.js" data-level="95">
+                            <div class="star-core">
+                                <i class="fab fa-react"></i>
+                                <span class="skill-percentage">95%</span>
+                            </div>
+                            <div class="skill-label">React.js</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                        
+                        <div class="skill-star" data-skill="JavaScript" data-level="92">
+                            <div class="star-core">
+                                <i class="fab fa-js-square"></i>
+                                <span class="skill-percentage">92%</span>
+                            </div>
+                            <div class="skill-label">JavaScript</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                        
+                        <div class="skill-star" data-skill="TypeScript" data-level="85">
+                            <div class="star-core">
+                                <i class="fab fa-js"></i>
+                                <span class="skill-percentage">85%</span>
+                            </div>
+                            <div class="skill-label">TypeScript</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                        
+                        <div class="skill-star" data-skill="HTML/CSS" data-level="98">
+                            <div class="star-core">
+                                <i class="fab fa-html5"></i>
+                                <span class="skill-percentage">98%</span>
+                            </div>
+                            <div class="skill-label">HTML/CSS</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                        
+                        <div class="skill-star" data-skill="Vue.js" data-level="78">
+                            <div class="star-core">
+                                <i class="fab fa-vuejs"></i>
+                                <span class="skill-percentage">78%</span>
+                            </div>
+                            <div class="skill-label">Vue.js</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Backend Skills -->
+                <div class="skill-domain backend-domain">
+                    <div class="domain-header">
+                        <div class="domain-icon">
+                            <i class="fab fa-node-js"></i>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <h3>Backend Excellence</h3>
+                        <p>Building robust server architectures</p>
+                    </div>
+                    
+                    <di class="skills-constellation">
+                        <div class="skill-star" data-skill="Node.js" data-level="90">
+                            <div class="star-core">
+                                <i class="fab fa-node-js"></i>
+                                <span class="skill-percentage">90%</span>
+                            </div>
+                            <div class="skill-label">Node.js</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                        
+                        <div class="skill-star" data-skill="Python" data-level="88">
+                            <div class="star-core">
+                                <i class="fab fa-python"></i>
+                                <span class="skill-percentage">88%</span>
+                            </div>
+                            <div class="skill-label">Python</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                        
+                        <div class="skill-star" data-skill="MongoDB" data-level="82">
+                            <div class="star-core">
+                                <i class="fas fa-database"></i>
+                                <span class="skill-percentage">82%</span>
+                            </div>
+                            <div class="skill-label">MongoDB</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                        
+                        <div class="skill-star" data-skill="Express.js" data-level="87">
+                            <div class="star-core">
+                                <i class="fas fa-server"></i>
+                                <span class="skill-percentage">87%</span>
+                            </div>
+                            <div class="skill-label">Express.js</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                        
+                      
+                    
+                </div>
+                
+                <!-- DevOps & Tools -->
+                <div class="skill-domain tools-domain">
+                    <div class="domain-header">
+                        <div class="domain-icon">
+                            <i class="fab fa-docker"></i>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <h3>DevOps & Tools</h3>
+                        <p>Streamlining development workflows</p>
+                    </div>
+                    
+                    <div class="skills-constellation">
+                        <div class="skill-star" data-skill="Git & GitHub" data-level="95">
+                            <div class="star-core">
+                                <i class="fab fa-git-alt"></i>
+                                <span class="skill-percentage">95%</span>
+                            </div>
+                            <div class="skill-label">Git & GitHub</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                        
+                        <div class="skill-star" data-skill="Docker" data-level="80">
+                            <div class="star-core">
+                                <i class="fab fa-docker"></i>
+                                <span class="skill-percentage">80%</span>
+                            </div>
+                            <div class="skill-label">Docker</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                        
+                        <div class="skill-star" data-skill="AWS" data-level="72">
+                            <div class="star-core">
+                                <i class="fab fa-aws"></i>
+                                <span class="skill-percentage">72%</span>
+                            </div>
+                            <div class="skill-label">AWS</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                        
+                        <div class="skill-star" data-skill="Firebase" data-level="85">
+                            <div class="star-core">
+                                <i class="fas fa-fire"></i>
+                                <span class="skill-percentage">85%</span>
+                            </div>
+                            <div class="skill-label">Firebase</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                        
+                        <div class="skill-star" data-skill="Kubernetes" data-level="65">
+                            <div class="star-core">
+                                <i class="fas fa-dharmachakra"></i>
+                                <span class="skill-percentage">65%</span>
+                            </div>
+                            <div class="skill-label">Kubernetes</div>
+                            <div class="skill-orbit"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Skills Summary Stats -->
+            <div class="skills-summary">
+                <div class="summary-stat">
+                    <div class="stat-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-number">10+</span>
+                        <span class="stat-label">Technologies</span>
+                    </div>
+                </div>
+                
+                <div class="summary-stat">
+                    <div class="stat-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-number">10+</span>
+                        <span class="stat-label">Projects Built</span>
+                    </div>
+                </div>
+                
+                
+                
+                <div class="summary-stat">
+                    <div class="stat-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Passion</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="education" id="education">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Education</h2>
+                <p class="section-subtitle">My academic journey and professional experience</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker education-marker">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Bachelor of Technology - Computer Science</h3>
+                            <span class="timeline-date">2023 - 2027</span>
+                        </div>
+                        <h4>Narsimha Reddy Engineering College</h4>
+                        <p class="timeline-location"><i class="fas fa-map-marker-alt"></i> Hyderabad, India</p>
+                        <p>Current CGPA: <strong>8.0/10</strong></p>
+                        
+                    
+                    </div>
+                </div>
+                
+            
+                
+               
+    </section>
+<!-- Ultra-Stylish Projects Section -->
+<section class="ultra-projects" id="projects">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Featured Projects</h2>
+      <p class="section-subtitle">Innovative solutions crafted with passion and precision</p>
+    </div>
+
+    <!-- Projects Filter -->
+    <div class="projects-filter">
+      <button class="filter-btn active" data-filter="all">
+        <i class="fas fa-th"></i> All Projects
+      </button>
+      <button class="filter-btn" data-filter="web">
+        <i class="fas fa-globe"></i> Web Apps
+      </button>
+      <button class="filter-btn" data-filter="mobile">
+        <i class="fas fa-mobile-alt"></i> Mobile
+      </button>
+      <button class="filter-btn" data-filter="fullstack">
+        <i class="fas fa-layer-group"></i> Full Stack
+      </button>
+    </div>
+
+    <div class="projects-showcase">
+
+      <!-- Project 1: EduConnect -->
+      <div class="project-masterpiece featured" data-category="fullstack">
+        <div class="project-visual">
+          <div class="project-image">
+            <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/WhatsApp_Image_2025-10-27_at_19.58.48_j56egp.jpg" alt="EduConnect">
+          </div>
+          <div class="project-overlay">
+            <div class="overlay-content">
+              <div class="project-status">
+                <span class="status-badge live">Live</span>
+                <span class="status-badge featured">Featured</span>
+              </div>
+              <div class="project-actions">
+                <a href="#" class="action-btn primary" target="_blank">
+                  <i class="fas fa-external-link-alt"></i>
+                  <span>Live Demo</span>
+                </a>
+                <a href="#" class="action-btn secondary" target="_blank">
+                  <i class="fab fa-github"></i>
+                  <span>Source Code</span>
+                </a>
+              </div>
+            </div>
+            <div class="project-glow"></div>
+          </div>
+        </div>
+        <div class="project-details">
+          <div class="project-header">
+            <div class="project-icon"><i class="fas fa-users"></i></div>
+            <h3>EduConnect</h3>
+            <div class="project-rating">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+          </div>
+          <p class="project-description">
+            A student–teacher collaboration platform enabling online learning, chat, resource sharing, and event management. Built to enhance communication within educational institutions.
+          </p>
+          <div class="project-features">
+            <div class="feature-item"><i class="fas fa-comments"></i><span>Real-time Chat</span></div>
+            <div class="feature-item"><i class="fas fa-book"></i><span>Learning Modules</span></div>
+            <div class="feature-item"><i class="fas fa-bell"></i><span>Instant Notifications</span></div>
+          </div>
+          <div class="tech-stack">
+            <div class="tech-category">
+              <span class="category-label">Stack:</span>
+              <div class="tech-tags">
+                <span class="tech-tag react">React</span>
+                <span class="tech-tag node">Node.js</span>
+                <span class="tech-tag mongodb">MongoDB</span>
+                <span class="tech-tag socket">Socket.io</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 2: HealthCare -->
+      <div class="project-masterpiece" data-category="web">
+        <div class="project-visual">
+          <div class="project-image">
+            <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/healthcare_uluhzt.png" alt="HealthCare">
+          </div>
+          <div class="project-overlay">
+            <div class="overlay-content">
+              <div class="project-status"><span class="status-badge live">Live</span></div>
+              <div class="project-actions">
+                <a href="#" class="action-btn primary" target="_blank">
+                  <i class="fas fa-external-link-alt"></i><span>Live Demo</span>
+                </a>
+                <a href="#" class="action-btn secondary" target="_blank">
+                  <i class="fab fa-github"></i><span>Source Code</span>
+                </a>
+              </div>
+            </div>
+            <div class="project-glow"></div>
+          </div>
+        </div>
+        <div class="project-details">
+          <div class="project-header">
+            <div class="project-icon"><i class="fas fa-heartbeat"></i></div>
+            <h3>HealthCare</h3>
+            <div class="project-rating">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+            </div>
+          </div>
+          <p class="project-description">
+            A medical management web app that allows patients to book appointments, track health records, and communicate with doctors securely online.
+          </p>
+          <div class="project-features">
+            <div class="feature-item"><i class="fas fa-calendar-check"></i><span>Online Booking</span></div>
+            <div class="feature-item"><i class="fas fa-file-medical"></i><span>Health Records</span></div>
+            <div class="feature-item"><i class="fas fa-video"></i><span>Video Consultation</span></div>
+          </div>
+          <div class="tech-stack">
+            <div class="tech-category">
+              <span class="category-label">Stack:</span>
+              <div class="tech-tags">
+                <span class="tech-tag html">HTML</span>
+                <span class="tech-tag css">CSS</span>
+                <span class="tech-tag js">JavaScript</span>
+                <span class="tech-tag firebase">Firebase</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+     
+      <!-- Project 4: CareerPathr -->
+      <div class="project-masterpiece" data-category="fullstack">
+        <div class="project-visual">
+          <div class="project-image">
+            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80" alt="CareerPathr">
+          </div>
+          <div class="project-overlay">
+            <div class="overlay-content">
+              <div class="project-status"><span class="status-badge live">Live</span></div>
+              <div class="project-actions">
+                <a href="#" class="action-btn primary" target="_blank">
+                  <i class="fas fa-external-link-alt"></i><span>Live Demo</span>
+                </a>
+                <a href="#" class="action-btn secondary" target="_blank">
+                  <i class="fab fa-github"></i><span>Source Code</span>
+                </a>
+              </div>
+            </div>
+            <div class="project-glow"></div>
+          </div>
+        </div>
+        <div class="project-details">
+          <div class="project-header">
+            <div class="project-icon"><i class="fas fa-briefcase"></i></div>
+            <h3>CareerPath</h3>
+            <div class="project-rating">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+          </div>
+          <p class="project-description">
+            AI-powered career guidance and skill tracking platform that helps users plan learning goals, explore career paths, and monitor growth using data analytics.
+          </p>
+          <div class="project-features">
+            <div class="feature-item"><i class="fas fa-chart-line"></i><span>Progress Tracking</span></div>
+            <div class="feature-item"><i class="fas fa-user-graduate"></i><span>Career Guidance</span></div>
+            <div class="feature-item"><i class="fas fa-bullseye"></i><span>Goal Setting</span></div>
+          </div>
+          <div class="tech-stack">
+            <div class="tech-category">
+              <span class="category-label">Stack:</span>
+              <div class="tech-tags">
+                <span class="tech-tag python">Python</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 5: EcoTrack -->
+      <div class="project-masterpiece" data-category="web">
+        <div class="project-visual">
+          <div class="project-image">
+            <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/WhatsApp_Image_2025-10-27_at_19.35.58_rzsfrw.jpg" alt="EcoTrack">
+          </div>
+          <div class="project-overlay">
+            <div class="overlay-content">
+              <div class="project-status"><span class="status-badge development">In Progress</span></div>
+              <div class="project-actions">
+                <a href="#" class="action-btn primary" target="_blank">
+                  <i class="fas fa-external-link-alt"></i><span>Preview</span>
+                </a>
+                <a href="#" class="action-btn secondary" target="_blank">
+                  <i class="fab fa-github"></i><span>Source Code</span>
+                </a>
+              </div>
+            </div>
+            <div class="project-glow"></div>
+          </div>
+        </div>
+        <div class="project-details">
+          <div class="project-header">
+            <div class="project-icon"><i class="fas fa-leaf"></i></div>
+            <h3>EcoTrack</h3>
+            <div class="project-rating">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+            </div>
+          </div>
+          <p class="project-description">
+            EcoTrack helps users monitor and reduce their daily carbon footprint by tracking energy usage, travel, and waste habits with a sustainability dashboard.
+          </p>
+          <div class="project-features">
+            <div class="feature-item"><i class="fas fa-recycle"></i><span>Carbon Tracker</span></div>
+            <div class="feature-item"><i class="fas fa-chart-pie"></i><span>Analytics Dashboard</span></div>
+            <div class="feature-item"><i class="fas fa-bell"></i><span>Eco Reminders</span></div>
+          </div>
+          <div class="tech-stack">
+            <div class="tech-category">
+              <span class="category-label">Stack:</span>
+              <div class="tech-tags">
+                <span class="tech-tag python">Python</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 6: Quiz Game -->
+      <div class="project-masterpiece" data-category="web">
+        <div class="project-visual">
+          <div class="project-image">
+            <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/quiz_cyihtj.png" alt="Quiz Game">
+          </div>
+          <div class="project-overlay">
+            <div class="overlay-content">
+              <div class="project-status"><span class="status-badge live">Live</span></div>
+              <div class="project-actions">
+                <a href="#" class="action-btn primary" target="_blank">
+                  <i class="fas fa-external-link-alt"></i><span>Live Demo</span>
+                </a>
+                <a href="#" class="action-btn secondary" target="_blank">
+                  <i class="fab fa-github"></i><span>Source Code</span>
+                </a>
+              </div>
+            </div>
+            <div class="project-glow"></div>
+          </div>
+        </div>
+        <div class="project-details">
+          <div class="project-header">
+            <div class="project-icon"><i class="fas fa-question-circle"></i></div>
+            <h3>Quiz Game</h3>
+            <div class="project-rating">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+            </div>
+          </div>
+          <p class="project-description">
+            A fun and educational quiz platform fetching unlimited random questions, with timer-based gameplay and scoring logic to test your knowledge dynamically.
+          </p>
+          <div class="project-features">
+            <div class="feature-item"><i class="fas fa-clock"></i><span>Timed Quizzes</span></div>
+            <div class="feature-item"><i class="fas fa-random"></i><span>Random Questions</span></div>
+            <div class="feature-item"><i class="fas fa-trophy"></i><span>Score Tracker</span></div>
+          </div>
+          <div class="tech-stack">
+            <div class="tech-category">
+              <span class="category-label">Stack:</span>
+              <div class="tech-tags">
+                <span class="tech-tag html">HTML</span>
+                <span class="tech-tag css">CSS</span>
+                <span class="tech-tag js">JavaScript</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="projects-cta">
+      <div class="cta-content">
+        <h3>Impressed by what you see?</h3>
+        <p>Explore my complete collection of projects and open-source contributions</p>
+      </div>
+      <div class="cta-actions">
+        <a href="https://github.com/arpitha-5" class="cta-btn primary" target="_blank">
+          <i class="fab fa-github"></i> <span>View GitHub Portfolio</span>
+        </a>
+        <a href="#contact" class="cta-btn secondary">
+          <i class="fas fa-handshake"></i> <span>Let's Collaborate</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Let's discuss how we can work together on your next project</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Let's talk about everything!</h3>
+                    <p>Don't hesitate to reach out if you have any questions or just want to say hello. I'm always open to discussing new opportunities and interesting projects.</p>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Email</h4>
+                                <p>arpithamedarametla@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Location</h4>
+                                <p>Hyderabad, India</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Status</h4>
+                                <p>Available for opportunities</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-social">
+                        <a href="https://github.com/arpitha-5" target="_blank" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/arpitha-medarametla/" target="_blank" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                       
+        
+                        <a href="mailto:arpithamedarametla@gmail.com" aria-label="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="contact-form-container">
+                    <form class="contact-form" id="contact-form">
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" required>
+                            <label for="name">Your Name</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" required>
+                            <label for="email">Your Email</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="text" id="subject" name="subject" required>
+                            <label for="subject">Subject</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                            <label for="message">Your Message</label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary submit-btn" id="submit-btn">
+                            <span class="btn-text">Send Message</span>
+                            <div class="btn-loader">
+                                <div class="loader"></div>
+                            </div>
+                            <div class="btn-success hidden">
+                                <i class="fas fa-check"></i>
+                                <span>Sent!</span>
+                            </div>
+                        </button>
+                        
+                        <!-- Flying Letter Animation -->
+                        <div class="flying-letter" id="flying-letter">
+                            <div class="letter-body">
+                                <div class="letter-content">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="letter-trail"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Email Sent Notification -->
+                        <div class="email-sent-notification" id="email-notification">
+                            <div class="notification-content">
+                                <div class="notification-icon">
+                                    <i class="fas fa-paper-plane"></i>
+                                </div>
+                                <div class="notification-text">
+                                    <h4>Email Sent!</h4>
+                                    <p>Your message has been delivered successfully</p>
+                                </div>
+                                <div class="notification-close" onclick="hideNotification()">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </div>
+                            <div class="notification-progress"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ultra-Stylish Modern Footer -->
+    <footer class="modern-footer">
+        <!-- Animated Wave Background -->
+        <div class="footer-waves">
+            <svg class="wave wave-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path fill="url(#waveGradient1)" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                <defs>
+                    <linearGradient id="waveGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" class="wave-stop-1" stop-opacity="0.3" />
+                        <stop offset="50%" class="wave-stop-2" stop-opacity="0.2" />
+                        <stop offset="100%" class="wave-stop-3" stop-opacity="0.3" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <svg class="wave wave-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path fill="url(#waveGradient2)" fill-opacity="1" d="M0,160L48,144C96,128,192,96,288,96C384,96,480,128,576,133.3C672,139,768,117,864,106.7C960,96,1056,96,1152,117.3C1248,139,1344,181,1392,202.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                <defs>
+                    <linearGradient id="waveGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" class="wave-stop-2" stop-opacity="0.2" />
+                        <stop offset="50%" class="wave-stop-3" stop-opacity="0.1" />
+                        <stop offset="100%" class="wave-stop-1" stop-opacity="0.2" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        
+        <div class="footer-container">
+            <!-- Compact Newsletter Section -->
+            <div class="newsletter-section">
+                <div class="newsletter-content">
+                    <div class="newsletter-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="newsletter-text">
+                        <h4>Stay Updated</h4>
+                        <p>Get notified about my latest projects</p>
+                    </div>
+                    <div class="newsletter-form">
+                        <div class="input-group">
+                            <input type="email" placeholder="Your email" class="newsletter-input">
+                            <button type="button" class="newsletter-btn">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Footer Content -->
+            <div class="footer-main">
+                <!-- Brand Section -->
+                <div class="footer-brand">
+                    <div class="brand-logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-code"></i>
+                            <div class="logo-glow"></div>
+                        </div>
+                        <div class="brand-text">
+                            <h3 class="brand-name">Arpitha Medarametla</h3>
+                            <p class="brand-tagline">Full Stack Developer & Tech Innovator</p>
+                        </div>
+                    </div>
+                    <p class="brand-description">
+                        Crafting exceptional digital experiences through innovative technology solutions. 
+                        Passionate about creating scalable applications and exploring emerging technologies.
+                    </p>
+                    
+                    <!-- Achievement Stats -->
+                    <div class="brand-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">5+</span>
+                            <span class="stat-label">Projects</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">2</span>
+                            <span class="stat-label">Years Experience</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Dedication</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h4 class="section-title">
+                        <i class="fas fa-link"></i>
+                        Quick Navigation
+                    </h4>
+                    <ul class="footer-links">
+                        <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="#about"><i class="fas fa-user"></i> About Me</a></li>
+                        <li><a href="#skills"><i class="fas fa-cogs"></i> Skills</a></li>
+                        <li><a href="#education"><i class="fas fa-graduation-cap"></i> Education</a></li>
+                        <li><a href="#projects"><i class="fas fa-rocket"></i> Projects</a></li>
+                        <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Services -->
+                <div class="footer-section">
+                    <h4 class="section-title">
+                        <i class="fas fa-code-branch"></i>
+                        What I Offer
+                    </h4>
+                    <ul class="footer-services">
+                        <li><i class="fas fa-laptop-code"></i> Web Development</li>
+                        <li><i class="fas fa-mobile-alt"></i> Mobile Apps</li>
+                        <li><i class="fas fa-database"></i> Backend Development</li>
+                        <li><i class="fas fa-paint-brush"></i> UI/UX Design</li>
+                        <li><i class="fas fa-shield-alt"></i> Security Consulting</li>
+                        <li><i class="fas fa-cloud"></i> Cloud Solutions</li>
+                    </ul>
+                </div>
+                
+                <!-- Contact & Social -->
+                <div class="footer-section">
+                    <h4 class="section-title">
+                        <i class="fas fa-paper-plane"></i>
+                        Let's Connect
+                    </h4>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:arpithamedarametla@gmail.com">arpithamedarametla@gmail.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Hyderabad, India</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Available for opportunities</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Enhanced Social Links -->
+                    <div class="social-media">
+                        <h5>Follow My Journey:</h5>
+                        <div class="social-links">
+                            <a href="https://github.com/arpitha-5" target="_blank" rel="noopener noreferrer" 
+                               class="social-link github" aria-label="GitHub">
+                                <i class="fab fa-github"></i>
+                                <span class="social-tooltip">GitHub</span>
+                            </a>
+                            <a href="https://www.linkedin.com/in/arpitha-medarametla/" target="_blank" rel="noopener noreferrer" 
+                               class="social-link linkedin" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                                <span class="social-tooltip">LinkedIn</span>
+                            </a>
+                           
+                            <a href="mailto:arpithamedarametla@gmail.com" 
+                               class="social-link email" aria-label="Email">
+                                <i class="fas fa-envelope"></i>
+                                <span class="social-tooltip">Email</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p class="copyright-text">
+                         <strong>Arpitha</strong> © Copyrights 2025
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Particles Effect -->
+        <div class="footer-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scroll-to-top" aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Custom JavaScript -->
+    <script src="simple-main.js"></script>
+</body>
+</html>
+        
+        <style>
+            /* Professional Projects Section */
+            .projects-showcase {
+                padding: 120px 0;
+                background: var(--bg-secondary);
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .projects-showcase .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 2rem;
+            }
+            
+            /* Section Header */
+            .projects-showcase .section-header {
+                text-align: center;
+                margin-bottom: 80px;
+                position: relative;
+            }
+            
+            .section-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 16px;
+                background: var(--glass-bg);
+                backdrop-filter: var(--backdrop-blur);
+                border: 1px solid var(--glass-border);
+                border-radius: 50px;
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: var(--primary-color);
+                margin-bottom: 24px;
+                transition: var(--transition);
+            }
+            
+            .section-badge:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-lg);
+            }
+            
+            .projects-showcase .section-title {
+                font-size: clamp(2.5rem, 5vw, 4rem);
+                font-weight: 700;
+                color: var(--text-primary);
+                margin-bottom: 20px;
+                background: var(--gradient-primary);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            
+            .section-description {
+                font-size: 1.2rem;
+                color: var(--text-secondary);
+                max-width: 600px;
+                margin: 0 auto;
+                line-height: 1.6;
+            }
+            
+            /* Project Filters */
+            .project-filters {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 16px;
+                margin-bottom: 60px;
+            }
+            
+            .filter-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 12px 24px;
+                background: var(--bg-card);
+                border: 1px solid var(--border-color);
+                border-radius: var(--border-radius);
+                font-size: 0.9rem;
+                font-weight: 500;
+                color: var(--text-secondary);
+                cursor: pointer;
+                transition: var(--transition);
+                text-decoration: none;
+            }
+            
+            .filter-btn:hover {
+                background: var(--primary-color);
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-lg);
+            }
+            
+            .filter-btn.active {
+                background: var(--gradient-primary);
+                color: white;
+                border-color: var(--primary-color);
+                box-shadow: var(--shadow-glow);
+            }
+            
+            /* Projects Container */
+            .projects-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+                gap: 32px;
+                margin-bottom: 80px;
+            }
+            
+            /* Project Item */
+            .project-item {
+                background: var(--bg-card);
+                border: 1px solid var(--border-color);
+                border-radius: var(--border-radius-lg);
+                overflow: hidden;
+                transition: var(--transition);
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                box-shadow: var(--shadow-sm);
+            }
+            
+            .project-item:hover {
+                transform: translateY(-8px);
+                box-shadow: var(--shadow-xl);
+                border-color: var(--primary-color);
+            }
+            
+            .project-item.featured {
+                border-color: var(--primary-color);
+                box-shadow: var(--shadow-glow);
+            }
+            
+            /* Project Media */
+            .project-media {
+                position: relative;
+                height: 220px;
+                overflow: hidden;
+                background: var(--gradient-primary);
+            }
+            
+            .project-image {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+            }
+            
+            .project-emoji {
+                font-size: 4rem;
+                opacity: 0.9;
+                transition: var(--transition);
+            }
+            
+            .project-item:hover .project-emoji {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+            
+            .project-overlay {
+                position: absolute;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(10px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: var(--transition);
+            }
+            
+            .project-item:hover .project-overlay {
+                opacity: 1;
+            }
+            
+            .overlay-content {
+                text-align: center;
+                z-index: 2;
+            }
+            
+            /* Project Badges */
+            .project-badges {
+                display: flex;
+                justify-content: center;
+                gap: 8px;
+                margin-bottom: 20px;
+                flex-wrap: wrap;
+            }
+            
+            .badge {
+                padding: 4px 12px;
+                border-radius: 12px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            
+            .badge.featured {
+                background: var(--gradient-secondary);
+                color: white;
+            }
+            
+            .badge.status.live {
+                background: #10b981;
+                color: white;
+            }
+            
+            .badge.status.development {
+                background: #f59e0b;
+                color: white;
+            }
+            
+            /* Project Actions */
+            .project-actions {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+            }
+            
+            .action-btn {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                transition: var(--transition);
+                font-size: 1.2rem;
+            }
+            
+            .action-btn.primary {
+                background: var(--bg-card);
+                color: var(--primary-color);
+                border: 2px solid var(--primary-color);
+            }
+            
+            .action-btn.primary:hover {
+                background: var(--primary-color);
+                color: white;
+                transform: scale(1.1);
+            }
+            
+            .action-btn.secondary {
+                background: var(--glass-bg);
+                color: white;
