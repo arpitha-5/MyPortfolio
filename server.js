@@ -20,6 +20,7 @@ app.use(cors({
     'http://127.0.0.1:3000',
     'http://127.0.0.1:5500',
     'https://arpitha-medarametla.onrender.com',
+    'https://arpitha-medarametla-pc87.onrender.com',
     'https://arpitha-medarametla.vercel.app',
     'file://' // Allow file:// protocol for local development
   ],
@@ -48,6 +49,7 @@ app.options('/api/contact', cors({
     'http://127.0.0.1:5001',
     'http://127.0.0.1:5500',
     'https://arpitha-medarametla.onrender.com',
+    'https://arpitha-medarametla-pc87.onrender.com',
     'https://arpitha-medarametla.vercel.app',
     'file://'
   ],

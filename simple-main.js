@@ -349,7 +349,7 @@ function initContactForm() {
         try {
             // Send to backend API
             console.log('📡 Making request to /api/contact...');
-            const response = await fetch('/api/contact', {
+            const response = await fetch('https://arpitha-medarametla-pc87.onrender.com/api/contact', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
