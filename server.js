@@ -37,9 +37,32 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'portfolio.html'));
 });
 
+// Handle CORS preflight requests for /api/contact
+app.options('/api/contact', cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5000',
+    'http://localhost:5001',
+    'http://localhost:5500',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:5001',
+    'http://127.0.0.1:5500',
+    'https://arpitha-medarametla.onrender.com',
+    'https://arpitha-medarametla.vercel.app',
+    'file://'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 // Contact form endpoint
 app.post('/api/contact', async (req, res) => {
   try {
+    console.log('📨 Contact form request received');
+    console.log('Request method:', req.method);
+    console.log('Request URL:', req.url);
+    
     const { name, email, subject, message } = req.body;
 
     // Validate required fields
@@ -752,9 +775,30 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// 404 handler - catches requests to undefined routes
+app.use((req, res) => {
+  console.log(`⚠️ 404 - Route not found: ${req.method} ${req.url}`);
+  res.status(404).json({
+    success: false,
+    message: `Route not found: ${req.method} ${req.url}`
+  });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('🔴 Server error:', err);
+  res.status(500).json({
+    success: false,
+    message: 'Internal server error',
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Server error'
+  });
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📧 Email service: Resend`);
   console.log(`🌐 CORS enabled for portfolio domains`);
+  console.log(`📝 Contact endpoint: POST http://localhost:${PORT}/api/contact`);
+  console.log(`🏥 Health check: GET http://localhost:${PORT}/health`);
 });

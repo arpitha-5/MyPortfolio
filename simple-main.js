@@ -576,7 +576,7 @@ function initContactForm() {
                     <div class="success-header">
                         <div class="logo-success-combo">
                             <div class="success-logo">
-                                <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/ammu_eiue6q.jpg" alt="Arpitha Logo" class="notification-logo" />
+                                <img src="https://res.cloudinary.com/notes1/image/upload/arpitha-portfolio_nqdtu0.jpg" alt="Arpitha Medarametla" class="notification-logo" />
                                 <div class="success-badge">✓</div>
                             </div>
                             <div class="mail-animation">
@@ -592,6 +592,8 @@ function initContactForm() {
             if (messageElement) {
                 messageElement.innerHTML = `
                     <div class="epic-success-message">
+                        <span class="epic-title">✨ LEGENDARY SUCCESS! ✨</span>
+                        <br>
                         <span class="success-message">🚀 Your message just LAUNCHED into my priority inbox!</span>
                         <br>
                         <span class="thanks-text">I'm THRILLED about your project - expect an epic reply soon! ⚡</span>
