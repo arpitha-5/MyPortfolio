@@ -1,625 +1,760 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
-const bodyParser = require('body-parser');
 const cors = require('cors');
+const { Resend } = require('resend');
 const path = require('path');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
-// Normalize and validate environment variables
-const EMAIL_USER = (process.env.EMAIL_USER || '').trim();
-const EMAIL_PASS = (process.env.EMAIL_PASS || '').trim();
-const FROM_EMAIL = EMAIL_USER;
-const FROM_NAME = 'Arpitha Medarametla';
-
-if (!EMAIL_USER || !EMAIL_PASS) {
-    console.error('❌ Missing EMAIL_USER or EMAIL_PASS in .env file');
-    process.exit(1);
-}
-
-console.log(`📧 Email configured for: ${EMAIL_USER}`);
-console.log(`📧 App password length: ${EMAIL_PASS.length} characters`);
+// Initialize Resend
+const resend = new Resend(RESEND_API_KEY);
 
 // Middleware
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5000',
+    'http://localhost:5500',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:5500',
+    'https://arpitha-medarametla.onrender.com',
+    'https://arpitha-medarametla.vercel.app',
+    'file://' // Allow file:// protocol for local development
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.use(express.json());
 
-// Serve static files (your portfolio)
-app.use(express.static(path.join(__dirname)));
+// Serve static files
+app.use(express.static(__dirname));
 
-// Serve the portfolio at root
+// Serve portfolio.html at root
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'portfolio.html'));
-});
-
-// Optional: direct resume route
-app.get('/resume', (req, res) => {
-    res.sendFile(path.join(__dirname, 'assets', 'ARPITHA_RESUME.pdf'));
-});
-
-// Nodemailer Gmail transport (App Password required)
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-        user: EMAIL_USER,
-        pass: EMAIL_PASS
-    }
-});
-
-// Verify email configuration
-transporter.verify((error, success) => {
-    if (error) {
-        console.log('❌ Email configuration error:', error);
-        if (error && (error.responseCode === 535 || /Username and Password not accepted/i.test(String(error)))) {
-            console.log('⚠️ Gmail rejected the login. Ensure: 2-Step Verification is ON, use a Gmail App Password (16 chars, no spaces), and EMAIL_USER matches the Gmail address.');
-        }
-    } else {
-        console.log('✅ Email server is ready to send messages');
-    }
+  res.sendFile(path.join(__dirname, 'portfolio.html'));
 });
 
 // Contact form endpoint
 app.post('/api/contact', async (req, res) => {
-    try {
-        const { name, email, subject, message } = req.body;
+  try {
+    const { name, email, subject, message } = req.body;
 
-        // Validate required fields
-        if (!name || !email || !subject || !message) {
-            return res.status(400).json({
-                success: false,
-                message: 'All fields are required'
-            });
-        }
-
-        // Email validation regex
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return res.status(400).json({
-                success: false,
-                message: 'Please provide a valid email address'
-            });
-        }
-
-        // Email to Arpitha (portfolio owner) - Ultra Stylish Version
-        const ownerMailOptions = {
-            from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
-            to: 'arpithamedarametla@gmail.com',
-            subject: `ARPITHA MEDARAMETLA: New Client Inquiry - ${subject}`,
-            html: `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>New Portfolio Contact</title>
-                    <style>
-                        @keyframes glow {
-                            0% { box-shadow: 0 15px 50px rgba(0,0,0,0.2), 0 0 20px rgba(102,126,234,0.3); }
-                            100% { box-shadow: 0 15px 50px rgba(0,0,0,0.2), 0 0 40px rgba(102,126,234,0.6); }
-                        }
-                        @keyframes float {
-                            0% { transform: translateY(0px) rotate(0deg); }
-                            50% { transform: translateY(-10px) rotate(1deg); }
-                            100% { transform: translateY(0px) rotate(0deg); }
-                        }
-                    </style>
-                </head>
-                <body style="margin: 0; padding: 20px; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); min-height: 100vh; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;">
-                    <div style="max-width: 700px; margin: 0 auto; background: rgba(255,255,255,0.95); border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.2);">
-                        
-                        <!-- Animated Header -->
-                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%, #f093fb 200%); padding: 0; position: relative; overflow: hidden;">
-                            <!-- Background Pattern -->
-                            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%); animation: float 6s ease-in-out infinite;"></div>
-                            
-                            <!-- Header Content -->
-                            <div style="position: relative; z-index: 2; padding: 40px 30px; text-align: center; color: white;">
-                                <!-- Priority Badge -->
-                                <div style="display: inline-block; background: rgba(255,255,255,0.25); backdrop-filter: blur(10px); padding: 8px 20px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.3);">
-                                    <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">🔥 Priority Contact</span>
-                                </div>
-                                
-                                <!-- Profile Picture -->
-                                <div style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 25px; border: 4px solid rgba(255,255,255,0.4); box-shadow: 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.3); overflow: hidden; position: relative;">
-                                    <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/ammu_eiue6q.jpg" alt="Arpitha Medarametla - Full Stack Developer" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(1.1) contrast(1.1);">
-                                    <div style="position: absolute; top: -2px; right: -2px; width: 25px; height: 25px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; border: 2px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">✓</div>
-                                </div>
-                                
-                                <!-- Title -->
-                                <h1 style="margin: 0 0 15px 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
-                                    New Client Inquiry!
-                                </h1>
-                                <p style="margin: 0 0 8px 0; font-size: 18px; opacity: 0.95; font-weight: 500;">Someone wants to collaborate with Arpitha Medarametla</p>
-                                <p style="margin: 0; font-size: 16px; opacity: 0.85; font-weight: 300;">Full Stack Web Developer • React • Node.js • Python</p>
-                                
-                                <!-- Time Badge -->
-                                <div style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 10px 15px; border-radius: 15px; font-size: 12px; border: 1px solid rgba(255,255,255,0.2);">
-                                    ⚡ Just Now
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Main Content -->
-                        <div style="padding: 45px 35px;">
-                            <!-- Client Profile Card -->
-                            <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-radius: 16px; padding: 30px; margin-bottom: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7); border: 1px solid rgba(99,102,241,0.1);">
-                                <div style="display: flex; align-items: center; margin-bottom: 25px;">
-                                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-right: 20px; font-size: 22px; box-shadow: 0 4px 15px rgba(99,102,241,0.3);">
-                                        👨‍💼
-                                    </div>
-                                    <div>
-                                        <h2 style="margin: 0; color: #1f2937; font-size: 22px; font-weight: 700;">Client Information</h2>
-                                        <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 14px;">Potential collaboration opportunity</p>
-                                    </div>
-                                </div>
-                                
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
-                                    <div style="background: rgba(99,102,241,0.05); padding: 20px; border-radius: 12px; border-left: 4px solid #6366f1;">
-                                        <label style="color: #6b7280; font-size: 12px; text-transform: uppercase; font-weight: 600; letter-spacing: 1px;">Full Name</label>
-                                        <p style="margin: 8px 0 0 0; color: #1f2937; font-size: 18px; font-weight: 700;">${name}</p>
-                                    </div>
-                                    <div style="background: rgba(16,185,129,0.05); padding: 20px; border-radius: 12px; border-left: 4px solid #10b981;">
-                                        <label style="color: #6b7280; font-size: 12px; text-transform: uppercase; font-weight: 600; letter-spacing: 1px;">Email Address</label>
-                                        <p style="margin: 8px 0 0 0;"><a href="mailto:${email}" style="color: #10b981; text-decoration: none; font-size: 16px; font-weight: 600;">${email}</a></p>
-                                    </div>
-                                </div>
-                                
-                                <div style="background: rgba(245,158,11,0.05); padding: 20px; border-radius: 12px; border-left: 4px solid #f59e0b; margin-top: 20px;">
-                                    <label style="color: #6b7280; font-size: 12px; text-transform: uppercase; font-weight: 600; letter-spacing: 1px;">Subject</label>
-                                    <p style="margin: 8px 0 0 0; color: #1f2937; font-size: 18px; font-weight: 600;">${subject}</p>
-                                </div>
-                            </div>
-                            
-                            <!-- Message Content -->
-                            <div style="background: linear-gradient(135deg, #fefefe 0%, #f9fafb 100%); border-radius: 16px; padding: 30px; margin-bottom: 35px; border: 2px solid #e5e7eb; position: relative; overflow: hidden;">
-                                <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: radial-gradient(circle, rgba(16,185,129,0.1) 0%, transparent 70%); border-radius: 50%; transform: translate(30px, -30px);"></div>
-                                
-                                <div style="position: relative; z-index: 2;">
-                                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
-                                        <div style="width: 45px; height: 45px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 18px; font-size: 20px; box-shadow: 0 4px 15px rgba(16,185,129,0.3);">
-                                            💬
-                                        </div>
-                                        <h3 style="margin: 0; color: #1f2937; font-size: 20px; font-weight: 700;">Message Details</h3>
-                                    </div>
-                                    
-                                    <div style="background: white; padding: 25px; border-radius: 12px; border-left: 4px solid #10b981; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-                                        <p style="color: #374151; line-height: 1.8; margin: 0; font-size: 16px; white-space: pre-wrap;">${message}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Quick Actions -->
-                            <div style="text-align: center; margin-bottom: 20px;">
-                                <h3 style="color: #1f2937; margin-bottom: 20px; font-size: 18px; font-weight: 600;">⚡ Quick Actions</h3>
-                                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                                    <a href="mailto:${email}?subject=Re: ${subject}&body=Hi ${name},%0D%0A%0D%0AThank you for reaching out! I'm Arpitha Medarametla, a Full Stack Web Developer.%0D%0A%0D%0AI'm excited about your project. Let's schedule a call to discuss your requirements in detail.%0D%0A%0D%0ABest regards,%0D%0AArpitha Medarametla" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px 30px; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 16px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 25px rgba(102,126,234,0.4); transition: all 0.3s ease; border: none;">
-                                        📧 Reply Now
-                                    </a>
-                                    <a href="https://calendly.com/your-link" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 16px 25px; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 25px rgba(16,185,129,0.4);">
-                                        📅 Schedule Call
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Professional Footer -->
-                        <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 35px; text-align: center; border-top: 1px solid #e5e7eb; position: relative; overflow: hidden;">
-                            <div style="position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #667eea, #764ba2, #667eea);"></div>
-                            
-                            <div style="margin-bottom: 25px;">
-                                <!-- Mini Profile Section -->
-                                <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px; gap: 20px;">
-                                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #667eea; box-shadow: 0 4px 15px rgba(102,126,234,0.3); overflow: hidden;">
-                                        <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/ammu_eiue6q.jpg" alt="Arpitha Medarametla" style="width: 100%; height: 100%; object-fit: cover;">
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <h4 style="margin: 0; color: #1f2937; font-size: 20px; font-weight: 800;">
-                                            Arpitha Medarametla
-                                        </h4>
-                                        <p style="margin: 2px 0; color: #667eea; font-size: 14px; font-weight: 600;">
-                                            Full Stack Web Developer
-                                        </p>
-                                        <p style="margin: 2px 0; color: #6b7280; font-size: 12px;">
-                                            React • Node.js • Python • MongoDB • AWS
-                                        </p>
-                                    </div>
-                                </div>
-                                
-                                <!-- Contact Info -->
-                                <div style="background: white; padding: 20px; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid rgba(102,126,234,0.1);">
-                                    <p style="margin: 0 0 10px 0; color: #374151; font-size: 14px;">
-                                        📧 <a href="mailto:arpithamedarametla@gmail.com" style="color: #667eea; text-decoration: none; font-weight: 600;">arpithamedarametla@gmail.com</a> • 📍 Hyderabad, India
-                                    </p>
-                                    <p style="margin: 0; color: #6b7280; font-size: 12px;">
-                                        📅 <strong>Message Received:</strong> ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'medium' })} IST
-                                    </p>
-                                </div>
-                                
-                                <!-- Social Links -->
-                                <div style="display: flex; justify-content: center; gap: 15px; margin: 20px 0;">
-                                    <a href="https://github.com/arpitha-5" style="width: 35px; height: 35px; background: #24292e; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; box-shadow: 0 2px 8px rgba(36,41,46,0.3);">🐙</a>
-                                    <a href="https://www.linkedin.com/in/arpitha-medarametla/" style="width: 35px; height: 35px; background: #0a66c2; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; box-shadow: 0 2px 8px rgba(10,102,194,0.3);">💼</a>
-                                </div>
-                            </div>
-                            
-                            <p style="margin: 0; color: #9ca3af; font-size: 11px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
-                                🔒 Secure Portfolio Contact System • Powered by Arpitha's Portfolio
-                            </p>
-                        </div>
-                    </div>
-                </body>
-                </html>
-            `,
-            replyTo: email
-        };
-
-        // Confirmation email to the user - Ultra Stylish Version
-        const userMailOptions = {
-            from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
-            to: email,
-            subject: ` Thank you ${name.split(' ')[0]}! Your message is on its way to me`,
-            html: `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Message Confirmation - Arpitha Medarametla</title>
-                    <style>
-                        @keyframes glow {
-                            0% { box-shadow: 0 6px 25px rgba(78,205,196,0.4), 0 0 15px rgba(78,205,196,0.2); }
-                            100% { box-shadow: 0 6px 25px rgba(78,205,196,0.6), 0 0 30px rgba(78,205,196,0.4); }
-                        }
-                        @keyframes pulse {
-                            0% { transform: scale(1); }
-                            50% { transform: scale(1.08); }
-                            100% { transform: scale(1); }
-                        }
-                        @keyframes bounce {
-                            0%, 100% { transform: translateY(0); }
-                            50% { transform: translateY(-5px); }
-                        }
-                        @keyframes shimmer {
-                            0% { left: -100%; }
-                            100% { left: 100%; }
-                        }
-                        @keyframes float {
-                            0% { transform: translateY(0px) rotate(0deg); }
-                            50% { transform: translateY(-15px) rotate(2deg); }
-                            100% { transform: translateY(0px) rotate(0deg); }
-                        }
-                    </style>
-                </head>
-                <body style="margin: 0; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%, #f093fb 200%); min-height: 100vh; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;">
-                    <div style="max-width: 700px; margin: 0 auto; background: rgba(255,255,255,0.98); border-radius: 25px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.3);">
-                        
-                        <!-- Hero Header -->
-                        <div style="background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%); padding: 0; position: relative; overflow: hidden;">
-                            <!-- Animated Background Elements -->
-                            <div style="position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); border-radius: 50%; animation: float 8s ease-in-out infinite;"></div>
-                            <div style="position: absolute; bottom: -30px; right: -30px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%); border-radius: 50%; animation: float 6s ease-in-out infinite reverse;"></div>
-                            
-                            <!-- Header Content -->
-                            <div style="position: relative; z-index: 3; padding: 50px 35px; text-align: center; color: white;">
-                                <!-- Success Badge with Animation -->
-                                <div style="display: inline-block; background: linear-gradient(135deg, rgba(16,185,129,0.9) 0%, rgba(5,150,105,0.9) 100%); backdrop-filter: blur(20px); padding: 12px 35px; border-radius: 50px; margin-bottom: 30px; border: 2px solid rgba(255,255,255,0.4); box-shadow: 0 8px 30px rgba(16,185,129,0.4), inset 0 1px 0 rgba(255,255,255,0.3); position: relative; overflow: hidden;">
-                                    <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmer 2s infinite;"></div>
-                                    <span style="font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.2); position: relative; z-index: 2;">🎉 MISSION ACCOMPLISHED 🎉</span>
-                                </div>
-                                
-<<<<<<< HEAD
-                                <!-- Profile Picture with Success Badge -->
-                                <div style="position: relative; width: 110px; height: 110px; margin: 0 auto 30px;">
-                                    <div style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.5); box-shadow: 0 15px 45px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.4); overflow: hidden;">
-                                        <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/ammu_eiue6q.jpg" alt="Arpitha Medarametla - Full Stack Developer" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(1.15) contrast(1.1);">
-                                    </div>
-                                    <div style="position: absolute; bottom: -5px; right: -5px; width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; border: 3px solid white; box-shadow: 0 4px 15px rgba(16,185,129,0.4);">
-                                        🎆
-                                    </div>
-=======
-                                <!-- Epic Dual Image Success Display -->
-                                <div style="position: relative; margin: 0 auto 40px; width: 150px; height: 150px;">
-                                    <!-- Main Profile Picture with Success Glow -->
-                                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.2) 100%); border-radius: 50%; margin: 0; display: flex; align-items: center; justify-content: center; border: 4px solid rgba(255,255,255,0.5); box-shadow: 0 20px 60px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.4); overflow: hidden; position: relative; animation: pulse 2s ease-in-out infinite;">
-                                        <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/ammu_eiue6q.jpg" alt="Arpitha Medarametla" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; position: absolute; top: 0; left: 0; filter: brightness(1.2) contrast(1.1) saturate(1.1);" />
-                                        <div style="position: absolute; inset: 0; background: linear-gradient(45deg, rgba(78,205,196,0.15) 0%, rgba(68,160,141,0.15) 100%); border-radius: 50%; pointer-events: none;"></div>
-                                    </div>
-                                    
-                                    <!-- Success Checkmark -->
-                                    <div style="position: absolute; top: 5px; right: 5px; width: 35px; height: 35px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 15px rgba(245,158,11,0.5); animation: bounce 1s ease-in-out infinite; color: white; font-weight: bold;">✓</div>
->>>>>>> 90a293d (updated5)
-                                </div>
-                                
-                                <!-- Ultra-Stylish Success Title -->
-                                <div style="background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%); backdrop-filter: blur(25px); padding: 35px; border-radius: 25px; border: 2px solid rgba(255,255,255,0.4); margin-bottom: 20px; position: relative; overflow: hidden;">
-                                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, rgba(16,185,129,0.1), rgba(59,130,246,0.1), rgba(168,85,247,0.1)); opacity: 0.5;"></div>
-                                    <div style="position: relative; z-index: 2; text-align: center;">
-                                        <h1 style="margin: 0 0 20px 0; font-size: 48px; font-weight: 900; text-shadow: 0 4px 25px rgba(0,0,0,0.5); line-height: 1.1; background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 50%, #fef3c7 100%); -webkit-background-clip: text; background-clip: text; animation: glow 2s ease-in-out infinite alternate;">
-                                            🎊 BOOM! ${name}! 🎊
-                                        </h1>
-                                        <div style="background: linear-gradient(135deg, rgba(16,185,129,0.9), rgba(5,150,105,0.9)); padding: 15px 25px; border-radius: 50px; margin: 15px 0; box-shadow: 0 8px 25px rgba(16,185,129,0.4); position: relative; overflow: hidden;">
-                                            <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent); animation: shimmer 2s infinite;"></div>
-                                            <p style="margin: 0; font-size: 22px; color: white; font-weight: 800; text-shadow: 0 2px 8px rgba(0,0,0,0.3); position: relative; z-index: 2;">🚀 MESSAGE SUCCESSFULLY LAUNCHED! 🚀</p>
-                                        </div>
-                                        <p style="margin: 0; font-size: 20px; opacity: 0.95; font-weight: 600; text-shadow: 0 2px 12px rgba(0,0,0,0.4); color: white;">Your epic project inquiry just landed in my VIP inbox! 💫</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Main Content Area -->
-                        <div style="padding: 50px 40px;">
-                            <!-- Success Confirmation -->
-                            <div style="text-align: center; margin-bottom: 40px;">
-                                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 20px; margin: 0 auto 25px; display: flex; align-items: center; justify-content: center; font-size: 35px; box-shadow: 0 8px 25px rgba(16,185,129,0.4), inset 0 1px 0 rgba(255,255,255,0.2); transform: rotate(3deg);">
-                                    ✅
-                                </div>
-                                <div style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%); padding: 4px; border-radius: 20px; margin-bottom: 20px; position: relative; overflow: hidden;">
-                                    <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 3s infinite;"></div>
-                                    <div style="background: white; padding: 30px; border-radius: 16px; position: relative; z-index: 2;">
-                                        <h2 style="color: transparent; margin: 0 0 25px 0; font-size: 36px; font-weight: 900; background: linear-gradient(135deg, #7c3aed, #ec4899, #f59e0b); -webkit-background-clip: text; background-clip: text; text-align: center; animation: pulse 2s ease-in-out infinite;">⚡ MISSION STATUS: LEGENDARY SUCCESS! ⚡</h2>
-                                        <div style="background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fecaca 100%); padding: 25px; border-radius: 20px; border: 3px solid #f59e0b; margin-top: 15px; position: relative; overflow: hidden;">
-                                            <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(245,158,11,0.2) 0%, transparent 70%); border-radius: 50%;"></div>
-                                            <p style="color: #92400e; font-size: 22px; line-height: 1.8; margin: 0; max-width: 550px; margin: 0 auto; font-weight: 700; text-align: center; position: relative; z-index: 2;">🎯 INCREDIBLE! Your message just crashed into my priority inbox like a shooting star! I'm absolutely ELECTRIFIED and ready to transform your vision into digital magic! ✨🔥</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- About Me Section -->
-                            <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 20px; padding: 35px; margin-bottom: 35px; position: relative; overflow: hidden; border: 1px solid rgba(59,130,246,0.1);">
-                                <!-- Decorative Element -->
-                                <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%); border-radius: 50%;"></div>
-                                
-                                <div style="position: relative; z-index: 2;">
-                                    <div style="display: flex; align-items: center; margin-bottom: 25px;">
-                                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-right: 20px; font-size: 26px; box-shadow: 0 6px 20px rgba(59,130,246,0.4); transform: rotate(-3deg);">
-                                            🚀
-                                        </div>
-                                        <div>
-                                            <h3 style="margin: 0; color: #1e40af; font-size: 24px; font-weight: 700;">Meet Your Developer</h3>
-                                            <p style="margin: 5px 0 0 0; color: #3b82f6; font-size: 14px; font-weight: 500;">Full Stack Web Development Expert</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div style="background: white; padding: 35px; border-radius: 15px; border-left: 6px solid #3b82f6; box-shadow: 0 4px 15px rgba(0,0,0,0.08); position: relative; overflow: hidden;">
-                                        <div style="position: absolute; top: 15px; right: 15px; width: 50px; height: 50px; border-radius: 50%; border: 2px solid rgba(59,130,246,0.2); overflow: hidden;">
-                                            <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/ammu_eiue6q.jpg" alt="Arpitha Medarametla" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.7;">
-                                        </div>
-                                        
-                                        <div style="position: relative; z-index: 2;">
-                                            <p style="color: #1e40af; margin: 0 0 20px 0; line-height: 1.8; font-size: 16px;">
-                                                Hello <strong>${name}</strong>! 👋<br><br>
-                                                I'm <strong>Arpitha Medarametla</strong>, a passionate and dedicated Full Stack Web Developer based in the tech hub of Hyderabad, India. 🇮🇳
-                                            </p>
-                                            
-                                            <div style="background: rgba(59,130,246,0.05); padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #3b82f6;">
-                                                <h4 style="margin: 0 0 12px 0; color: #1e40af; font-size: 16px; font-weight: 700;">🚀 What I Do:</h4>
-                                                <ul style="margin: 0; padding-left: 20px; color: #1e40af; line-height: 1.6;">
-                                                    <li><strong>Frontend Magic:</strong> React.js, TypeScript, Tailwind CSS</li>
-                                                    <li><strong>Backend Power:</strong> Node.js, Express, Python, Django</li>
-                                                    <li><strong>Database Mastery:</strong> MongoDB, PostgreSQL, MySQL</li>
-                                                    <li><strong>Cloud & DevOps:</strong> AWS, Docker, CI/CD Pipelines</li>
-                                                </ul>
-                                            </div>
-                                            
-                                            <p style="color: #1e40af; margin: 0; line-height: 1.8; font-size: 16px;">
-                                                I specialize in creating <strong>modern, scalable, and user-centric web applications</strong> that drive business growth and deliver exceptional user experiences. From concept to deployment, I bring ideas to life with clean, efficient code and innovative solutions.<br><br>
-                                                Your message means the world to me, and I'm genuinely thrilled about the opportunity to collaborate with you! Let's build something amazing together! 🎆✨
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Message Summary Card -->
-                            <div style="background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%); border-radius: 18px; padding: 30px; margin-bottom: 35px; border: 2px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
-                                <div style="display: flex; align-items: center; margin-bottom: 20px;">
-                                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-right: 18px; font-size: 22px; box-shadow: 0 4px 15px rgba(139,92,246,0.3);">
-                                        📝
-                                    </div>
-                                    <h3 style="color: #1f2937; margin: 0; font-size: 20px; font-weight: 700;">Your Message Details</h3>
-                                </div>
-                                
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                                    <div style="background: rgba(139,92,246,0.05); padding: 20px; border-radius: 12px; border-left: 4px solid #8b5cf6;">
-                                        <label style="color: #6b7280; font-size: 12px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Subject</label>
-                                        <p style="margin: 8px 0 0 0; color: #1f2937; font-size: 16px; font-weight: 600;">${subject}</p>
-                                    </div>
-                                    <div style="background: rgba(16,185,129,0.05); padding: 20px; border-radius: 12px; border-left: 4px solid #10b981;">
-                                        <label style="color: #6b7280; font-size: 12px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Received</label>
-                                        <p style="margin: 8px 0 0 0; color: #1f2937; font-size: 14px; font-weight: 600;">${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' })} IST</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- What's Next Section -->
-                            <div style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-radius: 20px; padding: 35px; margin-bottom: 35px; border-left: 6px solid #f59e0b; position: relative; overflow: hidden;">
-                                <div style="position: absolute; top: -10px; right: -10px; width: 60px; height: 60px; background: radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%); border-radius: 50%;"></div>
-                                
-                                <div style="position: relative; z-index: 2;">
-                                    <div style="display: flex; align-items: center; margin-bottom: 25px;">
-                                        <div style="width: 55px; height: 55px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-right: 20px; font-size: 24px; box-shadow: 0 6px 20px rgba(245,158,11,0.4); transform: rotate(5deg);">
-                                            ⏰
-                                        </div>
-                                        <h3 style="color: #92400e; margin: 0; font-size: 22px; font-weight: 700;">What Happens Next?</h3>
-                                    </div>
-                                    
-                                    <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 25px; border-radius: 15px; border: 1px solid rgba(245,158,11,0.2);">
-                                        <div style="display: grid; gap: 15px;">
-                                            <div style="display: flex; align-items: center; gap: 15px;">
-                                                <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; flex-shrink: 0;"></div>
-                                                <p style="margin: 0; color: #78350f; font-size: 16px; font-weight: 500;"><strong>Message Review:</strong> I'll carefully analyze your requirements and project needs</p>
-                                            </div>
-                                            <div style="display: flex; align-items: center; gap: 15px;">
-                                                <div style="width: 8px; height: 8px; background: #3b82f6; border-radius: 50%; flex-shrink: 0;"></div>
-                                                <p style="margin: 0; color: #78350f; font-size: 16px; font-weight: 500;"><strong>Quick Response:</strong> Expect a detailed, personalized reply within 24-48 hours</p>
-                                            </div>
-                                            <div style="display: flex; align-items: center; gap: 15px;">
-                                                <div style="width: 8px; height: 8px; background: #8b5cf6; border-radius: 50%; flex-shrink: 0;"></div>
-                                                <p style="margin: 0; color: #78350f; font-size: 16px; font-weight: 500;"><strong>Direct Contact:</strong> I'll reach out to <strong>${email}</strong> with next steps</p>
-                                            </div>
-                                            <div style="display: flex; align-items: center; gap: 15px;">
-                                                <div style="width: 8px; height: 8px; background: #f59e0b; border-radius: 50%; flex-shrink: 0;"></div>
-                                                <p style="margin: 0; color: #78350f; font-size: 16px; font-weight: 500;"><strong>Project Discussion:</strong> We'll schedule a call to dive deeper into your vision</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Social Connect Section -->
-                            <div style="text-align: center; padding: 35px; background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); border-radius: 20px; margin-bottom: 20px; border: 1px solid #e5e7eb;">
-                                <h3 style="color: #1f2937; margin: 0 0 20px 0; font-size: 22px; font-weight: 700;">🌐 Let's Stay Connected!</h3>
-                                <p style="color: #6b7280; margin: 0 0 25px 0; font-size: 16px;">Follow my journey and get insights into web development</p>
-                                
-                                <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                                    <a href="https://github.com/arpitha-5" style="background: linear-gradient(135deg, #24292e, #1b1f23); color: white; padding: 15px 20px; text-decoration: none; border-radius: 12px; font-size: 15px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(36,41,46,0.3); transition: all 0.3s ease; border: none;">
-                                        🐙 GitHub
-                                    </a>
-                                    <a href="https://www.linkedin.com/in/arpitha-medarametla/" style="background: linear-gradient(135deg, #0a66c2, #084d91); color: white; padding: 15px 20px; text-decoration: none; border-radius: 12px; font-size: 15px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(10,102,194,0.3); border: none;">
-                                        💼 LinkedIn
-                                    </a>
-        
-    
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Premium Footer -->
-                        <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); padding: 40px; text-align: center; color: white; position: relative; overflow: hidden;">
-                            <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #4ecdc4, #44a08d, #667eea, #764ba2);"></div>
-                            
-<<<<<<< HEAD
-                            <!-- Enhanced Profile Section -->
-                            <div style="margin-bottom: 30px;">
-                                <div style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px; border: 4px solid rgba(78,205,196,0.5); box-shadow: 0 8px 30px rgba(78,205,196,0.3); overflow: hidden; position: relative;">
-                                    <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/ammu_eiue6q.jpg" alt="Arpitha Medarametla" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(1.1);">
-                                    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(78,205,196,0.1), rgba(68,160,141,0.1)); border-radius: 50%;"></div>
-                                </div>
-                                
-                                <h4 style="margin: 0 0 10px 0; font-size: 26px; font-weight: 900; background: linear-gradient(135deg, #4ecdc4, #44a08d, #667eea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-shadow: 0 2px 10px rgba(78,205,196,0.3);">
-                                    Arpitha Medarametla
-=======
-                            <div style="margin-bottom: 20px;">
-                                <!-- Premium Footer: Profile + Logo Combo -->
-                                <div style="position: relative; margin: 0 auto 25px; width: 90px; height: 90px;">
-                                    <!-- Profile Picture -->
-                                    <div style="width: 70px; height: 70px; border-radius: 50%; margin: 0; overflow: hidden; border: 3px solid rgba(78,205,196,0.7); box-shadow: 0 6px 25px rgba(78,205,196,0.4), inset 0 2px 0 rgba(255,255,255,0.2); position: relative; animation: glow 2s ease-in-out infinite alternate;">
-                                        <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/ammu_eiue6q.jpg" alt="Arpitha Medarametla" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(1.1) contrast(1.05);" />
-                                        <div style="position: absolute; inset: 0; background: linear-gradient(45deg, rgba(78,205,196,0.1) 0%, rgba(68,160,141,0.1) 100%); pointer-events: none;"></div>
-                                    </div>
-                                    <!-- Logo Badge -->
-                                    <div style="position: absolute; bottom: -8px; right: -8px; width: 35px; height: 35px; background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-radius: 50%; border: 2px solid rgba(78,205,196,0.8); box-shadow: 0 3px 10px rgba(0,0,0,0.2); overflow: hidden; animation: bounce 2s ease-in-out infinite;">
-                                        <img src="https://res.cloudinary.com/dfeyi8eom/image/upload/ammu_eiue6q.jpg" alt="Arpitha Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
-                                    </div>
-                                </div>
-                                <h4 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #4ecdc4, #44a08d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-                                    🚀 Arpitha Medarametla
->>>>>>> 90a293d (updated5)
-                                </h4>
-                                <p style="margin: 0 0 15px 0; color: #e5e7eb; font-size: 18px; font-weight: 600;">
-                                    Full Stack Web Developer & Tech Innovator
-                                </p>
-                                <p style="margin: 0 0 20px 0; color: #9ca3af; font-size: 14px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.5;">
-                                    Crafting digital experiences with React • Node.js • Python • MongoDB • TypeScript • AWS
-                                </p>
-                                
-                                <!-- Professional Stats -->
-                                <div style="display: flex; justify-content: center; gap: 30px; margin: 25px 0; flex-wrap: wrap;">
-                                    <div style="text-align: center;">
-                                        <div style="color: #4ecdc4; font-size: 20px; font-weight: 800;">3+</div>
-                                        <div style="color: #9ca3af; font-size: 12px;">Years Experience</div>
-                                    </div>
-                                    <div style="text-align: center;">
-                                        <div style="color: #667eea; font-size: 20px; font-weight: 800;">50+</div>
-                                        <div style="color: #9ca3af; font-size: 12px;">Projects Built</div>
-                                    </div>
-                                    <div style="text-align: center;">
-                                        <div style="color: #44a08d; font-size: 20px; font-weight: 800;">100%</div>
-                                        <div style="color: #9ca3af; font-size: 12px;">Client Satisfaction</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Contact Information Card -->
-                            <div style="background: rgba(255,255,255,0.08); backdrop-filter: blur(15px); padding: 25px; border-radius: 20px; margin: 25px 0; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
-                                <h5 style="margin: 0 0 15px 0; color: #f3f4f6; font-size: 16px; font-weight: 700;">Get In Touch</h5>
-                                <p style="margin: 0 0 15px 0; color: #f3f4f6; font-size: 15px;">
-                                    📧 <a href="mailto:arpithamedarametla@gmail.com" style="color: #4ecdc4; text-decoration: none; font-weight: 600; border-bottom: 1px solid rgba(78,205,196,0.3);">arpithamedarametla@gmail.com</a>
-                                </p>
-                                <p style="margin: 0 0 15px 0; color: #d1d5db; font-size: 14px;">
-                                    📍 Based in Hyderabad, India • Available for remote & on-site projects
-                                </p>
-                                
-                                <!-- Enhanced Social Links -->
-                                <div style="display: flex; justify-content: center; gap: 15px; margin: 20px 0;">
-                                    <a href="https://github.com/arpitha-5" style="width: 45px; height: 45px; background: linear-gradient(135deg, #24292e, #1b1f23); border-radius: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 18px; box-shadow: 0 4px 15px rgba(36,41,46,0.4); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease;">🐙</a>
-                                    <a href="https://www.linkedin.com/in/arpitha-medarametla/" style="width: 45px; height: 45px; background: linear-gradient(135deg, #0a66c2, #084d91); border-radius: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 18px; box-shadow: 0 4px 15px rgba(10,102,194,0.4); border: 1px solid rgba(255,255,255,0.1);">💼</a>
-                                 
-                                </div>
-                            </div>
-                            
-                            <!-- Footer Note -->
-                            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; margin-top: 25px;">
-                                <p style="margin: 0; color: #6b7280; font-size: 12px; line-height: 1.4;">
-                                    🔒 Secure Auto-Confirmation System • Powered by Arpitha's Portfolio<br>
-                                    This is an automated message • Please do not reply to this email
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </body>
-                </html>
-            `
-        };
-
-        // Send both emails
-        await Promise.all([
-            transporter.sendMail(ownerMailOptions),
-            transporter.sendMail(userMailOptions)
-        ]);
-
-        console.log(`✅ Emails sent successfully for contact from: ${name} (${email})`);
-
-        res.json({
-            success: true,
-            message: 'Message sent successfully! Thank you for reaching out.'
-        });
-
-    } catch (error) {
-        console.error('❌ Contact form error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Failed to send message. Please try again later.'
-        });
+    // Validate required fields
+    if (!name || !email || !subject || !message) {
+      console.log('Validation failed: Missing required fields');
+      return res.status(400).json({
+        success: false,
+        message: 'All fields are required: name, email, subject, message'
+      });
     }
+
+    // Email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      console.log('Validation failed: Invalid email format');
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email address'
+      });
+    }
+
+    // Send email using Resend
+    const { data, error } = await resend.emails.send({
+      from: 'Arpitha Portfolio <onboarding@resend.dev>',
+      to: 'arpithamedarametla@gmail.com',
+      subject: `Portfolio Contact: ${subject}`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Client Inquiry</title>
+</head>
+
+<body style="margin:0;padding:0;background:#060912;font-family:Arial,Helvetica,sans-serif;">
+
+<!-- OUTER WRAPPER -->
+<table width="100%" cellpadding="0" cellspacing="0" style="padding:50px 12px;">
+<tr>
+<td align="center">
+
+<!-- MAIN CONTAINER -->
+<table width="680" cellpadding="0" cellspacing="0"
+style="background:#0f172a;border-radius:28px;overflow:hidden;
+box-shadow:0 40px 120px rgba(0,0,0,0.9);">
+
+<!-- ================= HERO HEADER ================= -->
+<tr>
+<td align="center"
+style="background:linear-gradient(135deg,#6366f1,#8b5cf6,#ec4899);
+padding:80px 40px;color:#ffffff;">
+
+<div style="
+background:rgba(255,255,255,0.15);
+display:inline-block;
+padding:12px 32px;
+border-radius:999px;
+font-size:13px;
+font-weight:bold;
+letter-spacing:1px;
+margin-bottom:26px;">
+🔥 PRIORITY PORTFOLIO CONTACT
+</div>
+
+<img src="https://res.cloudinary.com/notes1/image/upload/arpitha-portfolio_nqdtu0.jpg"
+width="140" height="140"
+style="
+border-radius:50%;
+border:6px solid rgba(255,255,255,0.35);
+display:block;
+margin:0 auto 24px;" />
+
+<h1 style="
+margin:0;
+font-size:44px;
+font-weight:800;
+letter-spacing:0.4px;">
+New Client Inquiry
+</h1>
+
+<p style="
+margin:20px 0 8px;
+font-size:18px;
+opacity:0.95;">
+Someone wants to collaborate with
+<b style="
+background:#fde047;
+color:#000;
+padding:5px 12px;
+border-radius:10px;">
+Arpitha
+</b>
+Medarametla
+</p>
+
+<p style="
+margin:0;
+font-size:15px;
+opacity:0.9;">
+Full Stack Developer • React • Node.js • Python • MongoDB • AWS
+</p>
+
+<div style="
+margin-top:28px;
+background:rgba(0,0,0,0.25);
+display:inline-block;
+padding:14px 34px;
+border-radius:999px;
+font-size:14px;">
+⚡ Message received just now
+</div>
+
+</td>
+</tr>
+
+<!-- ================= CLIENT INFORMATION ================= -->
+<tr>
+<td style="padding:48px 42px;background:#020617;color:#e5e7eb;">
+
+<h2 style="
+text-align:center;
+margin:0 0 32px;
+font-size:28px;
+color:#ffffff;
+letter-spacing:0.5px;">
+👤 Client Information
+</h2>
+
+<table width="100%" cellpadding="0" cellspacing="0"
+style="border-collapse:separate;border-spacing:0 18px;">
+
+<!-- NAME -->
+<tr>
+<td style="
+background:linear-gradient(135deg,#020617,#0f172a);
+padding:22px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.08);">
+
+<div style="
+font-size:12px;
+color:#a5b4fc;
+text-transform:uppercase;
+letter-spacing:1.2px;
+margin-bottom:8px;">
+Full Name
+</div>
+
+<div style="
+font-size:18px;
+font-weight:600;
+color:#ffffff;">
+${name}
+</div>
+
+</td>
+</tr>
+
+<!-- EMAIL -->
+<tr>
+<td style="
+background:linear-gradient(135deg,#020617,#0f172a);
+padding:22px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.08);">
+
+<div style="
+font-size:12px;
+color:#93c5fd;
+text-transform:uppercase;
+letter-spacing:1.2px;
+margin-bottom:8px;">
+Email Address
+</div>
+
+<div style="font-size:16px;font-weight:600;">
+<a href="mailto:${email}" style="color:#60a5fa;text-decoration:none;">
+${email}
+</a>
+</div>
+
+</td>
+</tr>
+
+<!-- SUBJECT -->
+<tr>
+<td style="
+background:linear-gradient(135deg,#020617,#0f172a);
+padding:22px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.08);">
+
+<div style="
+font-size:12px;
+color:#fbbf24;
+text-transform:uppercase;
+letter-spacing:1.2px;
+margin-bottom:8px;">
+Subject
+</div>
+
+<div style="
+font-size:16px;
+font-weight:600;
+color:#ffffff;">
+${subject}
+</div>
+
+</td>
+</tr>
+
+<!-- DATE -->
+<tr>
+<td style="
+background:linear-gradient(135deg,#020617,#0f172a);
+padding:22px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.08);">
+
+<div style="
+font-size:12px;
+color:#c084fc;
+text-transform:uppercase;
+letter-spacing:1.2px;
+margin-bottom:8px;">
+Received Time
+</div>
+
+<div style="font-size:14px;color:#cbd5e1;">
+${new Date().toLocaleString()}
+</div>
+
+</td>
+</tr>
+
+</table>
+</td>
+</tr>
+
+<!-- ================= MESSAGE SECTION ================= -->
+<tr>
+<td style="padding:48px 42px;background:#020617;color:#d1d5db;">
+
+<h2 style="
+text-align:center;
+margin:0 0 26px;
+font-size:28px;
+color:#ffffff;">
+💬 Client Message
+</h2>
+
+<div style="
+background:linear-gradient(135deg,#020617,#0f172a);
+border-left:6px solid #8b5cf6;
+padding:26px;
+border-radius:20px;
+line-height:1.9;
+font-size:16px;">
+${message}
+</div>
+
+</td>
+</tr>
+
+<!-- ================= CTA ================= -->
+<tr>
+<td align="center" style="padding:52px;background:#020617;">
+
+<a href="mailto:${email}?subject=Re: ${subject}"
+style="
+background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);
+color:#ffffff;
+text-decoration:none;
+padding:20px 52px;
+border-radius:999px;
+font-weight:bold;
+font-size:18px;
+display:inline-block;
+box-shadow:0 18px 50px rgba(168,85,247,0.6);">
+📩 Reply to ${name}
+</a>
+
+</td>
+</tr>
+
+<!-- ================= ABOUT SECTION ================= -->
+<tr>
+<td style="padding:48px 42px;background:#0f172a;color:#e5e7eb;">
+
+<h2 style="text-align:center;margin:0 0 24px;font-size:28px;">
+🚀 About Arpitha
+</h2>
+
+<p style="
+text-align:center;
+line-height:2;
+font-size:16px;
+margin:0 0 36px;
+color:#cbd5e1;">
+Passionate Full Stack Developer building scalable applications,
+modern UI systems, and cloud-ready digital platforms
+for real-world impact and innovation.
+</p>
+
+<table width="100%" cellpadding="0" cellspacing="0">
+
+<tr>
+<td width="50%" style="padding:10px;">
+<div style="background:#020617;padding:22px;border-radius:18px;text-align:center;">
+<b>💻 Frontend</b><br>
+<span style="font-size:13px;color:#94a3b8;">React, JS, HTML, CSS, Tailwind</span>
+</div>
+</td>
+
+<td width="50%" style="padding:10px;">
+<div style="background:#020617;padding:22px;border-radius:18px;text-align:center;">
+<b>⚙️ Backend</b><br>
+<span style="font-size:13px;color:#94a3b8;">Node.js, Express, Python</span>
+</div>
+</td>
+</tr>
+
+<tr>
+<td width="50%" style="padding:10px;">
+<div style="background:#020617;padding:22px;border-radius:18px;text-align:center;">
+<b>🗄 Database</b><br>
+<span style="font-size:13px;color:#94a3b8;">MongoDB, PostgreSQL</span>
+</div>
+</td>
+
+<td width="50%" style="padding:10px;">
+<div style="background:#020617;padding:22px;border-radius:18px;text-align:center;">
+<b>☁️ DevOps</b><br>
+<span style="font-size:13px;color:#94a3b8;">AWS, Docker, Git</span>
+</div>
+</td>
+</tr>
+
+</table>
+</td>
+</tr>
+
+<!-- ================= FOOTER ================= -->
+<tr>
+<td align="center" style="background:#020617;color:#94a3b8;padding:40px;">
+
+<div style="font-size:22px;color:#ffffff;font-weight:bold;margin-bottom:8px;">
+Arpitha Medarametla
+</div>
+
+<div style="font-size:14px;margin-bottom:18px;">
+Full Stack Web Developer • Hyderabad, India
+</div>
+
+<div style="margin-bottom:18px;">
+<a href="https://github.com/arpitha-5" style="color:#93c5fd;text-decoration:none;margin:0 12px;">GitHub</a> |
+<a href="https://www.linkedin.com/in/arpitha-medarametla/" style="color:#93c5fd;text-decoration:none;margin:0 12px;">LinkedIn</a> |
+<a href="mailto:arpithamedarametla@gmail.com" style="color:#93c5fd;text-decoration:none;margin:0 12px;">Email</a>
+</div>
+
+<div style="font-size:12px;opacity:0.6;">
+🔒 Secure Portfolio Contact System • © ${new Date().getFullYear()} Arpitha
+</div>
+
+</td>
+</tr>
+
+</table>
+</td>
+</tr>
+</table>
+
+</body>
+</html>
+`,
+      reply_to: email
+    });
+
+    if (error) {
+      console.error('Resend error:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to send email. Please try again later.'
+      });
+    }
+
+    console.log('Email sent successfully to portfolio owner:', data);
+
+    // Send thank you email to the submitter
+    const thankYouEmail = await resend.emails.send({
+      from: 'Arpitha Portfolio <onboarding@resend.dev>',
+      to: email,
+      subject: 'Thank you for contacting me! 🚀',
+      html: `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thank You for Contacting Srinath!</title>
+</head>
+
+<body style="margin:0;padding:0;background:#f8fafc;font-family:Arial,Helvetica,sans-serif;">
+
+<!-- OUTER WRAPPER -->
+<table width="100%" cellpadding="0" cellspacing="0" style="padding:50px 12px;">
+<tr>
+<td align="center">
+
+<!-- MAIN CONTAINER -->
+<table width="680" cellpadding="0" cellspacing="0"
+style="background:#ffffff;border-radius:28px;overflow:hidden;
+box-shadow:0 40px 120px rgba(0,0,0,0.1);border:1px solid #e2e8f0;">
+
+<!-- ================= HERO HEADER ================= -->
+<tr>
+<td align="center"
+style="background:linear-gradient(135deg,#6366f1,#8b5cf6,#ec4899);
+padding:80px 40px;color:#ffffff;">
+
+<div style="
+background:rgba(255,255,255,0.15);
+display:inline-block;
+padding:12px 32px;
+border-radius:999px;
+font-size:13px;
+font-weight:bold;
+letter-spacing:1px;
+margin-bottom:26px;">
+🎉 MESSAGE RECEIVED!
+</div>
+
+
+<img src="https://res.cloudinary.com/notes1/image/upload/arpitha-portfolio_nqdtu0.jpg"
+width="140" height="140"
+style="
+border-radius:50%;
+border:6px solid rgba(255,255,255,0.35);
+display:block;
+margin:0 auto 24px;" />
+
+<h1 style="
+margin:0;
+font-size:44px;
+font-weight:800;
+letter-spacing:0.4px;">
+Thank You, ${name}!
+</h1>
+
+<p style="
+margin:20px 0 8px;
+font-size:18px;
+opacity:0.95;">
+Your message has been received and I'm excited to connect with you!
+</p>
+
+<p style="
+margin:0;
+font-size:15px;
+opacity:0.9;">
+Full Stack Developer • React • Node.js • Python • MongoDB • AWS
+</p>
+
+<div style="
+margin-top:28px;
+background:rgba(0,0,0,0.25);
+display:inline-block;
+padding:14px 34px;
+border-radius:999px;
+font-size:14px;">
+✨ I'll get back to you within 24 hours
+</div>
+
+</td>
+</tr>
+
+<!-- ================= MESSAGE CONFIRMATION ================= -->
+<tr>
+<td style="padding:48px 42px;background:#f8fafc;color:#334155;">
+
+<h2 style="
+text-align:center;
+margin:0 0 32px;
+font-size:28px;
+color:#1e293b;
+letter-spacing:0.5px;">
+📬 Message Confirmation
+</h2>
+
+<div style="
+background:#ffffff;
+border-left:6px solid #6366f1;
+padding:26px;
+border-radius:20px;
+line-height:1.9;
+font-size:16px;
+box-shadow:0 4px 15px rgba(0,0,0,0.05);">
+<p><strong>Name:</strong> ${name}</p>
+<p><strong>Email:</strong> ${email}</p>
+<p><strong>Subject:</strong> ${subject}</p>
+<p><strong>Received:</strong> ${new Date().toLocaleString()}</p>
+<p><strong>Your Message:</strong></p>
+<p style="margin-top:15px;padding:15px;background:#f1f5f9;border-radius:10px;">${message}</p>
+</div>
+
+</td>
+</tr>
+
+<!-- ================= NEXT STEPS ================= -->
+<tr>
+<td style="padding:48px 42px;background:#ffffff;color:#334155;">
+
+<h2 style="text-align:center;margin:0 0 24px;font-size:28px;">
+🚀 What Happens Next?
+</h2>
+
+<table width="100%" cellpadding="0" cellspacing="0">
+
+<tr>
+<td width="33%" style="padding:10px;text-align:center;">
+<div style="background:#f8fafc;padding:22px;border-radius:18px;">
+<div style="font-size:32px;margin-bottom:10px;">📧</div>
+<b>Review</b><br>
+<span style="font-size:13px;color:#64748b;">I'll carefully review your message</span>
+</div>
+</td>
+
+<td width="33%" style="padding:10px;text-align:center;">
+<div style="background:#f8fafc;padding:22px;border-radius:18px;">
+<div style="font-size:32px;margin-bottom:10px;">💭</div>
+<b>Respond</b><br>
+<span style="font-size:13px;color:#64748b;">Get back to you within 24 hours</span>
+</div>
+</td>
+
+<td width="33%" style="padding:10px;text-align:center;">
+<div style="background:#f8fafc;padding:22px;border-radius:18px;">
+<div style="font-size:32px;margin-bottom:10px;">🤝</div>
+<b>Connect</b><br>
+<span style="font-size:13px;color:#64748b;">Let's discuss your project!</span>
+</div>
+</td>
+</tr>
+
+</table>
+</td>
+</tr>
+
+<!-- ================= ABOUT SECTION ================= -->
+<tr>
+<td style="padding:48px 42px;background:#f8fafc;color:#334155;">
+
+<h2 style="text-align:center;margin:0 0 24px;font-size:28px;">
+👨‍💻 About Arpitha Medarametla
+</h2>
+
+<p style="
+text-align:center;
+line-height:2;
+font-size:16px;
+margin:0 0 36px;
+color:#475569;">
+I'm a passionate Full Stack Developer specializing in modern web technologies.
+I love building scalable applications and turning ideas into reality.
+</p>
+
+<table width="100%" cellpadding="0" cellspacing="0">
+
+<tr>
+<td width="50%" style="padding:10px;">
+<div style="background:#ffffff;padding:22px;border-radius:18px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+<b>💻 Frontend</b><br>
+<span style="font-size:13px;color:#64748b;">React, JavaScript, HTML, CSS, Tailwind</span>
+</div>
+</td>
+
+<td width="50%" style="padding:10px;">
+<div style="background:#ffffff;padding:22px;border-radius:18px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+<b>⚙️ Backend</b><br>
+<span style="font-size:13px;color:#64748b;">Node.js, Express, Python, APIs</span>
+</div>
+</td>
+</tr>
+
+<tr>
+<td width="50%" style="padding:10px;">
+<div style="background:#ffffff;padding:22px;border-radius:18px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+<b>🗄 Database</b><br>
+<span style="font-size:13px;color:#64748b;">MongoDB, PostgreSQL, MySQL</span>
+</div>
+</td>
+
+<td width="50%" style="padding:10px;">
+<div style="background:#ffffff;padding:22px;border-radius:18px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+<b>☁️ Cloud & DevOps</b><br>
+<span style="font-size:13px;color:#64748b;">AWS, Docker, Git, CI/CD</span>
+</div>
+</td>
+</tr>
+
+</table>
+</td>
+</tr>
+
+<!-- ================= CTA ================= -->
+<tr>
+<td align="center" style="padding:52px;background:#ffffff;">
+
+<table cellpadding="0" cellspacing="0">
+<tr>
+<td style="padding:0 15px;">
+<a href="https://arpitha-medarametla.onrender.com"
+style="
+background:linear-gradient(135deg,#6366f1,#8b5cf6);
+color:#ffffff;
+text-decoration:none;
+padding:18px 36px;
+border-radius:999px;
+font-weight:bold;
+font-size:16px;
+display:inline-block;
+box-shadow:0 12px 35px rgba(99,102,241,0.4);">
+🌐 Visit My Portfolio
+</a>
+</td>
+
+<td style="padding:0 15px;">
+<a href="https://www.linkedin.com/in/arpitha-medarametla/"
+style="
+background:#ffffff;
+color:#0077b5;
+text-decoration:none;
+padding:18px 36px;
+border-radius:999px;
+font-weight:bold;
+font-size:16px;
+display:inline-block;
+border:2px solid #0077b5;
+box-shadow:0 8px 25px rgba(0,119,181,0.2);">
+💼 Connect on LinkedIn
+</a>
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+
+<!-- ================= FOOTER ================= -->
+<tr>
+<td align="center" style="background:#1e293b;color:#94a3b8;padding:40px;">
+
+<div style="font-size:22px;color:#ffffff;font-weight:bold;margin-bottom:8px;">
+Arpitha Medarametla
+</div>
+
+<div style="font-size:14px;margin-bottom:18px;">
+Full Stack Web Developer • Hyderabad, India
+</div>
+
+<div style="margin-bottom:18px;">
+<a href="https://github.com/arpitha-5" style="color:#93c5fd;text-decoration:none;margin:0 12px;">GitHub</a> |
+<a href="https://www.linkedin.com/in/arpitha-medarametla/" style="color:#93c5fd;text-decoration:none;margin:0 12px;">LinkedIn</a> |
+<a href="mailto:arpithamedarametla@gmail.com" style="color:#93c5fd;text-decoration:none;margin:0 12px;">Email</a>
+</div>
+
+<div style="font-size:12px;opacity:0.6;">
+💝 Thank you for reaching out! • © ${new Date().getFullYear()} Arpitha Medarametla
+</div>
+
+</td>
+</tr>
+
+</table>
+</td>
+</tr>
+</table>
+
+</body>
+</html>
+`,
+      reply_to: 'arpithamedarametla@gmail.com'
+    });
+
+    if (thankYouEmail.error) {
+      console.error('Thank you email error:', thankYouEmail.error);
+      // Don't fail the request if thank you email fails, just log it
+    } else {
+      console.log('Thank you email sent successfully to:', email);
+    }
+
+    console.log('Email sent successfully:', data);
+    res.status(200).json({
+      success: true,
+      message: 'Thank you for your message! I will get back to you soon.'
+    });
+
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error. Please try again later.'
+    });
+  }
 });
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
-    res.json({ 
-        status: 'OK', 
-        message: 'Contact form server is running',
-        timestamp: new Date().toISOString()
-    });
-});
-
-// Default route - serve portfolio
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'portfolio.html'));
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log(`📧 Contact form API available at http://localhost:${PORT}/api/contact`);
-    console.log(`🏠 Portfolio available at http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📧 Email service: Resend`);
+  console.log(`🌐 CORS enabled for portfolio domains`);
 });
-
-module.exports = app;

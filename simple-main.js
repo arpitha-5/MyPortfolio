@@ -131,16 +131,26 @@ function updateActiveNavLink(navLinks) {
     
     navLinks.forEach(function(link) {
         const targetId = link.getAttribute('href');
-        const targetSection = document.querySelector(targetId);
         
-        if (targetSection) {
-            const sectionTop = targetSection.offsetTop;
-            const sectionBottom = sectionTop + targetSection.offsetHeight;
+        // Skip invalid selectors (like "#" or empty href)
+        if (!targetId || targetId === '#' || !targetId.startsWith('#')) {
+            return;
+        }
+        
+        try {
+            const targetSection = document.querySelector(targetId);
             
-            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                navLinks.forEach(navLink => navLink.classList.remove('active'));
-                link.classList.add('active');
+            if (targetSection) {
+                const sectionTop = targetSection.offsetTop;
+                const sectionBottom = sectionTop + targetSection.offsetHeight;
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                    navLinks.forEach(navLink => navLink.classList.remove('active'));
+                    link.classList.add('active');
+                }
             }
+        } catch (error) {
+            console.warn('Invalid selector:', targetId);
         }
     });
 }
@@ -338,6 +348,7 @@ function initContactForm() {
         
         try {
             // Send to backend API
+            console.log('📡 Making request to /api/contact...');
             const response = await fetch('/api/contact', {
                 method: 'POST',
                 headers: {
@@ -346,9 +357,29 @@ function initContactForm() {
                 body: JSON.stringify(data)
             });
             
-            const result = await response.json();
+            console.log('📡 Response status:', response.status);
+            console.log('📡 Response ok:', response.ok);
             
-            if (response.ok && result.success) {
+            // Check if response is ok before trying to parse JSON
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('❌ Response not ok:', errorText);
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+            
+            const responseText = await response.text();
+            console.log('📡 Response text:', responseText);
+            
+            let result;
+            try {
+                result = JSON.parse(responseText);
+                console.log('📡 Parsed result:', result);
+            } catch (jsonError) {
+                console.error('❌ JSON parse error:', jsonError);
+                throw new Error('Invalid JSON response from server');
+            }
+            
+            if (result.success) {
                 console.log('✅ Email sent successfully!');
                 
                 // Start flying letter animation if element exists
