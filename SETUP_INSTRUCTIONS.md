@@ -1,13 +1,13 @@
 # 🚀 Portfolio Contact Form Backend Setup
 
-This guide will help you set up the Node.js backend for your portfolio contact form with email functionality.
+This guide will help you set up the Node.js backend for your portfolio contact form with Resend email functionality.
 
 ## 📋 Prerequisites
 
 Make sure you have the following installed:
-- **Node.js** (v14 or higher) - [Download here](https://nodejs.org/)
+- **Node.js** (v18 or higher) - [Download here](https://nodejs.org/)
 - **npm** (comes with Node.js)
-- **Yahoo Email Account** for sending emails
+- **Resend Account** for sending emails - [Sign up here](https://resend.com/)
 
 ## ⚙️ Setup Instructions
 
@@ -21,48 +21,29 @@ npm install
 
 This will install all required packages:
 - `express` - Web server framework
-- `nodemailer` - Email sending library
-- `body-parser` - Parse request bodies  
+- `resend` - Email sending library
+- `body-parser` - Parse request bodies
 - `cors` - Cross-origin resource sharing
 - `dotenv` - Environment variables management
 
 ### 2. **Create Environment File**
 
-Copy the example environment file:
-
-```bash
-copy .env.example .env
-```
-
-Or create a new `.env` file manually with this content:
+The `.env` file should contain:
 
 ```env
-# Email Configuration
-EMAIL_USER=your_yahoo_email@yahoo.com
-EMAIL_PASS=your_yahoo_app_password
+# Resend Email Configuration
+RESEND_API_KEY=your_resend_api_key_here
 
 # Server Configuration
-PORT=5000
+PORT=5001
 ```
 
-### 3. **Setup Yahoo Email App Password**
+### 3. **Setup Resend API Key**
 
-⚠️ **Important**: You cannot use your regular Yahoo password. You must create an App Password.
-
-1. **Go to Yahoo Account Security**: https://account.yahoo.com/account/security
-2. **Enable 2-Factor Authentication** (required for app passwords)
-3. **Generate App Password**:
-   - Click "Generate app password" or "App passwords"
-   - Select "Other (custom name)"
-   - Enter name: `Portfolio Contact Form`
-   - Copy the generated password (16 characters, no spaces)
-
-4. **Update your `.env` file**:
-   ```env
-   EMAIL_USER=your_actual_yahoo_email@yahoo.com
-   EMAIL_PASS=your_16_character_app_password
-   PORT=5000
-   ```
+1. **Sign up for Resend**: Go to [resend.com](https://resend.com/) and create an account
+2. **Get your API Key**: Go to your dashboard and create an API key
+3. **Add to .env**: Replace `your_resend_api_key_here` with your actual API key
+4. **Verify Domain** (Optional but recommended): Add your sending domain to improve deliverability
 
 ### 4. **Test the Server**
 
@@ -74,18 +55,31 @@ npm start
 
 You should see:
 ```
-🚀 Server running on http://localhost:5000
-📧 Contact form API available at http://localhost:5000/api/contact
-🏠 Portfolio available at http://localhost:5000
-✅ Email server is ready to send messages
+🚀 Server running on http://localhost:5001
+📧 Contact form API available at http://localhost:5001/api/contact
+🏠 Portfolio available at http://localhost:5001
 ```
 
 ### 5. **Test Email Functionality**
 
-Open your browser and navigate to: `http://localhost:5000`
+Run the email test:
+
+```bash
+node test-email.js
+```
+
+You should see:
+```
+🧪 Testing Resend email configuration...
+✅ Resend: Test email sent successfully!
+📊 Test Results: 1/1 configuration successful
+🎉 All tests passed! Your email configuration is ready.
+```
+
+Open your browser and navigate to: `http://localhost:5001`
 
 Your portfolio should load and the contact form should now:
-- ✅ Send emails to your Yahoo inbox
+- ✅ Send emails to your inbox via Resend
 - ✅ Send confirmation emails to users
 - ✅ Show success/error notifications
 - ✅ Include beautiful HTML email templates
@@ -94,14 +88,15 @@ Your portfolio should load and the contact form should now:
 
 ### Common Issues:
 
-**❌ "Email configuration error"**
-- Check that you're using an App Password, not your regular password
-- Verify 2FA is enabled on your Yahoo account
-- Make sure EMAIL_USER and EMAIL_PASS are correct in `.env`
+**❌ "Missing RESEND_API_KEY in .env file"**
+- Make sure your `.env` file exists and contains `RESEND_API_KEY=your_key_here`
+- Check that the API key is correct (starts with `re_`)
+- Ensure the `.env` file is in the same directory as `server.js`
 
 **❌ "Failed to send message"**
-- Verify your internet connection
-- Check Yahoo account isn't locked/suspended
+- Verify your Resend API key is valid
+- Check your internet connection
+- Make sure your Resend account has credits (free tier available)
 - Try regenerating the App Password
 
 **❌ "Module not found"**
@@ -116,7 +111,7 @@ Your portfolio should load and the contact form should now:
 
 Test if the server is working:
 ```bash
-curl http://localhost:5000/api/health
+curl http://localhost:5001/api/health
 ```
 
 Should return:
@@ -145,7 +140,7 @@ your-portfolio/
 
 For production deployment on services like **Heroku**, **Vercel**, or **Railway**:
 
-1. **Environment Variables**: Set EMAIL_USER and EMAIL_PASS in your hosting service's environment variables section
+1. **Environment Variables**: Set `RESEND_API_KEY` in your hosting service's environment variables section
 2. **Port Configuration**: The server will automatically use `process.env.PORT` for deployment
 3. **HTTPS**: Your hosting service should provide HTTPS automatically
 
@@ -160,18 +155,18 @@ The server includes beautiful HTML email templates:
 
 - **Keep `.env` secret**: Never commit it to version control
 - **Test locally first**: Make sure everything works before deploying
-- **Monitor emails**: Check your Yahoo inbox and spam folder
-- **Backup**: Keep a backup of your App Password
+- **Monitor emails**: Check your inbox and spam folder
+- **API Key Security**: Your Resend API key should be kept secure
 
 ## 🆘 Need Help?
 
 If you encounter issues:
 
 1. Check the console for error messages
-2. Verify all environment variables are set correctly
-3. Test with a simple email first
-4. Check Yahoo account security settings
+2. Verify your Resend API key is valid
+3. Test with the `node test-email.js` command
+4. Check your Resend dashboard for any issues
 
 ---
 
-**🎉 That's it!** Your portfolio contact form should now be fully functional with email capabilities!
+**🎉 That's it!** Your portfolio contact form should now be fully functional with Resend email capabilities!
